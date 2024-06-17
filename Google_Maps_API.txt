@@ -1,0 +1,52 @@
+<!---------------------------- Get Location (lat, long and address from choose on map) ------------------------------->
+1- add style for map size as 
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+2- add a div where map is open as 
+<div id="map"></div>
+
+3- add this java script code ,its work on load page
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 28.618270, lng: 77.373780},
+            zoom: 8
+        });
+
+        var geocoder = new google.maps.Geocoder();
+
+        map.addListener('click', function(event) {
+            var lat = event.latLng.lat();
+            var lng = event.latLng.lng();
+
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            geocodeLatLng(geocoder, map, lat, lng);
+        });
+    }
+
+    function geocodeLatLng(geocoder, map, lat, lng) {
+        var latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    document.getElementById('address').value = results[0].formatted_address;
+                } else {
+                    window.alert('No results found');
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
+    }
+</script>
+
+using this map/api/js cdn
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWm9WQBqqkxoXQyfmHplknRlC2V3LI404&libraries=places&callback=initMap"></script>
+in the above cdn already taken initMap callback when this cdn is load its automatically called the initMap function.
+
